@@ -4,7 +4,6 @@ struct node{
 int data ;
 struct node * next ;
 };
-struct node * tail = NULL ;
 struct node * get_node(int d){
 struct node * newnode = malloc(sizeof(struct node)) ;
 newnode->data = d  ;
@@ -15,7 +14,6 @@ void add_at_beg(struct node ** head , int d){
 if(head ==NULL){
     *head = get_node(d) ;
 }
-
 else{
 struct node* newnode = get_node(d) ;
 newnode->next  = *head ;
@@ -185,7 +183,6 @@ else{
 struct node * prev = head->next  ;
 struct node * second = head->next->next ;
 head->next = NULL ;
-
 while(head!=NULL){
 prev->next =head ;
 head = prev ;
