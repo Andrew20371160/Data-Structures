@@ -1,100 +1,77 @@
-#include<stdio.h>
-#include<stdlib.h>
-struct node {
+#include <stdio.h>
+#include <stdlib.h>
+//node struct
+typedef struct node{
 int data ;
-struct node * next  ;
-};
-int isempty(struct node * tail ) {
-return(tail==NULL) ;
+struct node*next ;
+}node ;
+//get memory for a new node
+node *get_node(int d ){
+node *newp = malloc(sizeof(node));
+newp->data=d;
+newp->next= newp ;
+return newp ;
 }
-struct node * add_at_empty(int d){
-struct node * tail =malloc(sizeof(struct node ))  ;
-tail->data= d ;
-tail->next = tail  ;
-return tail  ;
-};
-struct node * add_at_end(int d , struct node * tail ){
-if(isempty(tail)){
-    tail = add_at_empty(d)  ;
-    return tail ;
+//we add last element at the end with time complexity of O(1)
+void enque(int d , node **tail){
+if(*tail==NULL){
+    *tail= get_node(d);
 }
-else if(tail->next ==tail ){
-struct node * temp= add_at_empty(d) ;
-temp->next = tail  ;
-tail->next= temp ;
-tail  = temp ;
-return tail  ;
+else{
+    node *newp=  get_node(d);
+    newp->next= (*tail)->next;
+    (*tail)->next = newp;
+    (*tail)=newp;
 }
-else {
-struct node * temp= add_at_empty(d);
-temp->next = tail->next ;
-tail->next = temp ;
-tail = temp ;
-return tail ;
 }
+//First element is deleted in O(1)
+int deque(node**tail){
+if(*tail==NULL){
+    printf("\nEmpty Queue");
+    return -1;
+}
+else{
+int d = (*tail)->next->data;
+if((*tail)->next ==(*tail)){
+free(*tail); *tail=NULL;
+}
+else{
+    node*temp = (*tail)->next ;
+    (*tail)->next = temp->next ;
+    free(temp) ; temp = NULL;
+}
+return d;
+}
+}
+//show queue elements 
+void show(node*tail){
+if(tail==NULL){
+    return;
+}
+else{
+    node*ptr = tail->next ;
+    do{
+        printf("%d ",ptr->data) ;
+        ptr=  ptr->next ;
+    }while(ptr!=tail->next) ;
+}
+}
+//returns first element data 
+int peek(node*tail){
+if(tail==NULL){
+    printf("\nEmpty Queue");
+    return-1;
+}
+return tail->next->data;
+}
+//save memory
+void deque_all(node**tail){
+while(*tail!=NULL){
+    deque(tail) ;
+}
+}
+int main()
+{
 
-};
-int dequeue(struct node **tail ){
-if(isempty(*tail)){
-    printf("\n queue is empty");
-    return -1 ;
-}
-else if((*tail)->next  == (*tail)){
-    int val = (*tail)->data;
-    free((*tail)) ;
-    (*tail) = NULL ;
-    return val ;
-}
-else {
-struct node * temp = (*tail)->next ;
-int val = temp->data  ;
-(*tail)->next = temp->next ;
-free(temp) ;
-return val  ;
-
-}
-
-}
-int peek(struct node * tail){
-if(isempty(tail)){
-    printf("\n queue is empty ") ;
-    return -1 ;
-}
-else if (tail->next ==tail ){
-    return (tail->data)  ;
-}
-
-return tail->next ->data ;
-}
-void display(struct node * tail ){
-printf("\n" );
-if(isempty(tail)){
-    printf("\n queue is empty") ;
-    return ;
-}
-else if (tail->next == tail ){
-    printf("\n %d",tail->data) ;
-    return ;
-}
-else {
-struct node * ptr = tail->next ;
-do{
-printf(" %d",ptr ->data) ;
-ptr = ptr ->next ;
-
-}while(ptr !=tail->next);
-}
-}
-
-int main(){
-struct node * tail = NULL ;
-tail = add_at_empty(1) ;
-tail=add_at_end(7,tail) ;
-tail=add_at_end(66,tail) ;
-tail=add_at_end(5,tail) ;
-display(tail) ;
-int n = dequeue(&tail) ;
-printf("\n  %d",peek(tail)) ;
-display(tail );
-return 0 ;
+    return 0;
 }
