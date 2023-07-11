@@ -1,64 +1,75 @@
-#include<stdio.h>
-#include<stdlib.h>
-#define max 40
-int front = -1 ;
-int rear = -1 ;
-int arr[max];
+#include <stdio.h>
+#include <stdlib.h>
+#define max 10
+//our queue
+int q_arr[max];
+int rear=-1,front =-1;
 
 int is_empty(){
-return (front ==-1 && rear == -1 );
+return (rear==-1)&&(front==-1);
 }
+
 int is_full(){
-return (rear+1)%max==front ; 
+return (rear+1)%max==front;
 }
-void enque(int data){
-if(is_empty()){
-front = 0 ; rear = 0;
-arr[rear] = data ;
+
+void enque(int d ){
+if(is_full()){
+    return;
 }
-else if(is_full(){
-    printf("\nFull Queue") ;
-    return ;
+else if(is_empty()){
+    rear=0; front=0;
 }
-else {
-rear =(rear+1)%max ; 
-arr[rear]  = data ;
+rear=(rear+1)%max;
+q_arr[rear] = d;
 }
-}
+
 int deque(){
 if(is_empty()){
-    printf("\nEmpty queue") ;
+    printf("\nEmpty Queue");
     return -1 ;
 }
-else if (rear ==front ){
-rear = -1  ;
-front = -1 ;
+else if(rear==front){
+    rear=-1 ; front =-1 ;
 }
 else{
-front =(front +1)%max ;
-return(arr[head]);
+int num= q_arr[front] ;
+front = (front+1)%max;
+return num ;
 }
 }
-void display(){
-if(isempty()){
-    printf("\n queue is empty") ;
-    return  ;
+
+void show(){
+if(is_empty()){
+    return ;
 }
-for (int i = head; i <=tail ; i++){
-    printf("%d , ",arr[i]);
+puts("");
+int i = front  ;
+while(i!=rear){
+    printf("%d ",q_arr[i]);
+    i=(i+1)%max;
+
 }
+printf("%d",q_arr[rear]);
 }
 int main(){
+for(int i = 0 ; i <10;i++){
+    enque(i+1);
+}
 
-enqueue(1);
-enqueue(2);
-enqueue(3);
-enqueue(4);
-dequeue();
-dequeue();
-dequeue();
-dequeue();
+show();
+deque();
+deque();
+show();
+deque();
+deque();
+deque();
+enque(69);
+show();
+deque();
+deque();
+deque();
+show();
 
-display();
-return 0 ;
+    return 0;
 }
