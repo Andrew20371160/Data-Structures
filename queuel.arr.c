@@ -1,44 +1,43 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define max 10
-int head = -1 ;
-int tail = -1 ;
+#define max 40
+int front = -1 ;
+int rear = -1 ;
 int arr[max];
 
-int isempty(){
-return (head ==-1 && tail == -1 );
+int is_empty(){
+return (front ==-1 && rear == -1 );
 }
-void enqueue(int data){
-
-if(isempty()){
-tail++ ;
-head++ ;
-arr[tail] = data ;
+int is_full(){
+return (rear+1)%max==front ; 
 }
-else if((tail+1)%max == head){
-    printf("\n queue is empty") ;
+void enque(int data){
+if(is_empty()){
+front = 0 ; rear = 0;
+arr[rear] = data ;
+}
+else if(is_full(){
+    printf("\nFull Queue") ;
     return ;
 }
 else {
-tail = (tail+1)%max ;
-arr[tail]  = data ;
+rear =(rear+1)%max ; 
+arr[rear]  = data ;
 }
-
 }
-int dequeue(){
-if(isempty()){
-    printf("\n queue is empty ") ;
+int deque(){
+if(is_empty()){
+    printf("\nEmpty queue") ;
     return -1 ;
 }
-else if (head ==tail ){
-head = -1  ;
-tail = -1 ;
-
-return -1 ;
+else if (rear ==front ){
+rear = -1  ;
+front = -1 ;
 }
-head =(head +1)%max ;
+else{
+front =(front +1)%max ;
 return(arr[head]);
-
+}
 }
 void display(){
 if(isempty()){
