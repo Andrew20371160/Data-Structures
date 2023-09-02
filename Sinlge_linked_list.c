@@ -1,41 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
-struct node{
+//node structure
+typedef struct node{
 int data ;
 struct node * next ;
-};
-struct node * get_node(int d){
-struct node * newnode = malloc(sizeof(struct node)) ;
+}node;
+//allocate memory for a new node 
+node * get_node(int d){
+node * newnode = malloc(sizeof(node)) ;
 newnode->data = d  ;
 newnode->next= NULL ;
 return newnode ;
 };
-void add_at_beg(struct node ** head , int d){
+//adds an elelment at the beginning of the list
+void add_at_beg(node ** head , int d){
 if(head ==NULL){
     *head = get_node(d) ;
 }
 else{
-struct node* newnode = get_node(d) ;
+node* newnode = get_node(d) ;
 newnode->next  = *head ;
 *head = newnode ;
 }
 };
-void add_at_end(struct node ** head , int d ){
+//adds an element at the end of the list
+void add_at_end(node ** head , int d ){
     if(*head==NULL){
         *head = get_node(d) ;
-        tail = *head;
-
     }
     else{
-    struct node * newnode = get_node(d) ;
-    tail->next  = newnode ;
-    tail = newnode ;
+    node * newnode = get_node(d) ;
+    node *ptr = *head ;
+    while(ptr->next !=NULL){
+        ptr = ptr->next ;
     }
-
+    ptr->next = newnode ;
+    }
 }
-
-int list_size(struct node *head){
-struct node * ptr = head ;
+//returns the number of nodes in a linked list
+int list_size(node *head){
+node * ptr = head ;
 int count = 0 ;
 while(ptr!=NULL){
     ptr = ptr->next;
@@ -43,7 +47,8 @@ while(ptr!=NULL){
 }
 return count ;
 }
-void add_at_pos(int d,int pos,struct node ** head){
+//adds a node at a certain position
+void add_at_pos(int d,int pos,node ** head){
 if(pos<0||pos>(list_size(*head)+1)){
     printf("\nInvalid");
     return;
@@ -56,29 +61,26 @@ else {
         add_at_end(head,d) ;
     }
     else {
-         struct node * newnode = get_node(d) ;
-      struct  node * ptr = *head  ;
+    node * newnode = get_node(d) ;
+      node * ptr = *head  ;
         while(pos>1){
             pos-- ;
             ptr = ptr->next  ;
         }
         newnode->next  =ptr->next ;
         ptr->next = newnode ;
-    }
+}
 }
 };
-void showlist(struct node * head){
-if(head==NULL){
-    printf("\nEmpty") ;
-    return ;
-}
+//display the data in the list
+void showlist(node * head){
 puts("") ;
-struct node * ptr = head ;
-while(ptr!=NULL){
-    printf("%d ",ptr->data) ;
-    ptr = ptr->next ;
+while(head!=NULL){
+    printf("%d ",head->data) ;
+    head = head->next ;
 }
 }
+//deletion of 1st node then assigning the new head 
 void delfirst(struct node ** head ){
 if(*head ==NULL){
         return;
@@ -87,12 +89,12 @@ else if((*head)->next ==NULL) {
     free(*head) ; *head = NULL ;
 }
 else{
-struct node* temp = *head ;
-    *head = (*head) ->next ;
+    node* temp = *head ;
+    *head = (*head)->next ;
     free(temp) ; temp = NULL;
-
 }
 };
+//deletion of last node
 void dellast(struct node ** head ){
 if(head ==NULL){
     return ;
@@ -101,41 +103,35 @@ else if((*head)->next ==NULL){
    free(*head) ; head = NULL ;
 }
 else {
-   struct node  *ptr = *head ;
+    node  *ptr = *head ;
     while(ptr->next->next!=NULL ){
         ptr = ptr ->next ;
     }
     free(ptr->next);
     ptr->next = NULL ;
-
 }
-
 };
-struct node * del_data(int d  ,struct node * head){
+//deletes a node based on the data in it 
+node * del_data(int d  ,struct node * head){
 if(head ==NULL||head->data ==d){
    delfirst(&head) ;
 return head ;
 }
 else {
-struct node *ptr = head ;
+node *ptr = head ;
 while(ptr->next!=NULL){
     if(ptr->next->data ==d ){
-      struct  node * temp = ptr->next;
-        ptr ->next = ptr->next->next ;
+        node * temp = ptr->next;
+        ptr->next = ptr->next->next ;
         free(temp) ; temp = NULL ;
     }
-    else if(ptr->next->data ==d &&ptr->next->next==NULL){
-    struct   node *temp = ptr->next ;
-        ptr->next=NULL ;
-        free(temp);
-        temp=NULL;
-}
 ptr = ptr->next;
 }
 }
 return head ;
 }
-void del_at_pos(int  pos , struct node ** head){
+//deletes a certain node
+void del_at_pos(int  pos ,node ** head){
 if(pos<0||pos>=(list_size(*head))){
     printf("Invalid");
 return ;
@@ -148,40 +144,38 @@ else {
         dellast(head) ;
     }
     else {
-      struct  node * ptr =*head  ;
+      node * ptr =*head  ;
         while(pos>1){
             pos-- ;
             ptr = ptr->next  ;
         }
-        struct node *temp = ptr->next ;
+        node *temp = ptr->next ;
         ptr->next = ptr->next->next;
         free(temp) ; temp = NULL ;
 }
 }
 };
-struct node* delall(struct node *head){
-
-struct node * second = (head)->next ;
+//deletes all nodes of the list and assigning each to NULL
+node* del_all(struct node *head){
+    node * second = (head)->next ;
     while(second!=NULL){
-    head->next=NULL;
     free(head) ;
+    head = NULL ;
     head = second ;
     second= second->next ;
-
-
 }
 free(head) ; head = NULL ;
-
 return head ;
 }
+//reverese the nodes of the linked list
 struct node * reverse(struct node *head){
 int n = list_size(head) ;
 if(n<2){
     return head;
 }
 else{
-struct node * prev = head->next  ;
-struct node * second = head->next->next ;
+node * prev = head->next  ;
+node * second = head->next->next ;
 head->next = NULL ;
 while(head!=NULL){
 prev->next =head ;
@@ -193,16 +187,36 @@ head = prev;
 }
 return head ;
 };
-
+//switches the links of 2 nodes (not very usefull i guess )
+void switch_nodes(node **prev,node**pnext){
+if(prev&&pnext){
+(*prev)->next = (*pnext)->next;
+(*pnext)->next = (*prev);
+}
+}
+//returns pointer to smalles element in the list
+node * get_smallest(node *head){
+node * psmall = head ;
+while(head){
+if(psmall->data<head->data){
+    psmall= head ;
+}
+head = head->next ;
+}
+return psmall ;
+}
 int main()
 {
 struct node * head = NULL  ;
-for(int i = 0 ; i <15;i++ ){
-add_at_end(&head,i+1) ;
-}
+add_at_end(&head,10) ;
+add_at_end(&head,9) ;
+add_at_end(&head,2) ;
+add_at_end(&head,1) ;
+add_at_end(&head,0) ;
+add_at_end(&head,15) ;
+add_at_end(&head,19) ;
+showlist(head) ;
+head = del_all(head);
 showlist(head);
-head = reverse(head) ;
-showlist(head);
-head = NULL ;
     return 0;
 }
