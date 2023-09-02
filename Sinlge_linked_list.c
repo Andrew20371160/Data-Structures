@@ -205,6 +205,28 @@ head = head->next ;
 }
 return psmall ;
 }
+//insert elements in order (smaller to greater)
+void order_insert(node **head ,int data){
+if(*head){
+node *newnode =get_node(data);
+node *ptr = *head ;
+while((ptr->next!=NULL)&&newnode->data>ptr->next->data){
+    ptr = ptr->next ;
+}
+if(ptr==*head){
+newnode->next = *head;
+*head = newnode ;
+}
+else{
+newnode->next= ptr->next ;
+ptr->next = newnode ;
+}
+}
+else{
+    //head is NULL so allocate memory for it
+    *head = get_node(data);
+}
+}
 int main()
 {
 struct node * head = NULL  ;
