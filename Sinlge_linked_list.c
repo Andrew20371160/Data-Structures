@@ -255,6 +255,64 @@ head = head->next ;
 }
 return psmall ;
 }
+//sorting algorithm for data in the linked list
+//there are no memory leaks since we use delall() function (checked using bing dw :) )
+void merge(node *left ,node *right,node **head){
+//merge 2 sorted list into one sorted list
+node *pleft = left ;
+node *pright = right ;
+node *phead = *head ;
+while(pleft&&pright){
+    if(pleft->data<pright->data){
+        phead->data = pleft->data ;
+        pleft= pleft->next;
+    }
+    else{
+        phead->data =pright->data ;
+        pright= pright->next ;
+    }
+    phead=  phead->next ;
+}
+//checks if there are left data if one list is shorter than the other
+while(pleft){
+    phead->data = pleft->data ;
+    phead =phead->next ;
+    pleft  = pleft->next ;
+}
+while(pright){
+    phead->data = pright->data ;
+    phead = phead ->next ;
+    pright=  pright->next ;
+}
+//insure there is no memory leaks 
+delall(&left) ;
+delall(&right) ;
+}
+//the function you would call on main function
+void merge_sort(node **head){
+//get size of the list O(n)
+uint32 size  = list_size(*head);
+if(size>1){
+node *left = NULL;
+node *right = NULL ;
+node *phead= *head ;
+//split the list into 2 lists algorithm
+for(uint32 i= 0 ; i<size/2;i++){
+add_at_beg(&left,phead->data);
+phead= phead->next;
+}
+
+for(uint32 i=size/2; i<size; i++){
+add_at_beg(&right,phead->data);
+    phead=phead->next ;
+}
+//sort the left list then the right list 
+//then merge them into the main list
+merge_sort(&left);
+merge_sort(&right);
+merge(left,right,head) ;
+}
+}
 
 int main()
 {
